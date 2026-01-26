@@ -6,7 +6,7 @@
     <link rel="icon" type="image/jpeg" href="favicon.jpg">
     <title>Collin Clair</title>
     
-   <style>
+<style>
         * {
             margin: 0;
             padding: 0;
@@ -54,8 +54,7 @@
 
         .gallery {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            grid-auto-rows: 280px;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 20px;
             margin-bottom: 80px;
         }
@@ -96,10 +95,15 @@
         .post-card:nth-child(13) { background: #c4b5a8; }
         .post-card:nth-child(14) { background: #b5c5b8; }
         .post-card:nth-child(15) { background: #d5b8c4; }
+        .post-card:nth-child(16) { background: #c5d1b8; }
+        .post-card:nth-child(17) { background: #b8c4d1; }
+        .post-card:nth-child(18) { background: #d1c5a8; }
+        .post-card:nth-child(19) { background: #d4b5a0; }
+        .post-card:nth-child(20) { background: #a8c5d1; }
 
         .post-image {
             width: 100%;
-            flex: 1;
+            aspect-ratio: 1;
             background: #e8dcc8;
             display: flex;
             align-items: center;
@@ -110,7 +114,6 @@
             font-family: 'Courier New', monospace;
             letter-spacing: 2px;
             overflow: hidden;
-            min-height: 0;
         }
 
         .post-image img {
@@ -121,7 +124,7 @@
         }
 
         .post-content {
-            padding: 20px;
+            padding: 15px;
             flex-shrink: 0;
             display: flex;
             flex-direction: column;
@@ -130,22 +133,22 @@
         .post-date {
             font-size: 0.7rem;
             color: #5a5a5a;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
         .post-title {
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: bold;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             color: #3a4a6a;
             text-transform: uppercase;
             letter-spacing: 2px;
         }
 
         .post-caption {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             line-height: 1.5;
             color: #2a2a2a;
         }
@@ -158,14 +161,21 @@
             flex-direction: column;
             transition: transform 0.2s;
             overflow: hidden;
+            aspect-ratio: 1;
         }
 
         .spotify-card.large {
             grid-column: span 2;
+            aspect-ratio: 2/1;
         }
 
         .spotify-card.tall {
             grid-row: span 2;
+            aspect-ratio: 1/2;
+        }
+
+        .spotify-card.large.tall {
+            aspect-ratio: 1;
         }
 
         .spotify-card:hover {
@@ -179,7 +189,6 @@
         .spotify-card iframe {
             width: 100%;
             height: 100%;
-            min-height: 352px;
             border: none;
             display: block;
         }
@@ -187,19 +196,26 @@
         .text-card {
             border: 3px solid #2a2a2a;
             position: relative;
-            padding: 30px;
+            padding: 25px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             transition: transform 0.2s;
+            aspect-ratio: 1;
         }
 
         .text-card.large {
             grid-column: span 2;
+            aspect-ratio: 2/1;
         }
 
         .text-card.tall {
             grid-row: span 2;
+            aspect-ratio: 1/2;
+        }
+
+        .text-card.large.tall {
+            aspect-ratio: 1;
         }
 
         .text-card:hover {
@@ -213,18 +229,18 @@
         .text-card:nth-child(5n) { background: #b5d4a8; }
 
         .text-card .post-date {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .text-card .post-title {
-            font-size: 1.1rem;
-            margin-bottom: 15px;
+            font-size: 1rem;
+            margin-bottom: 12px;
         }
 
         .text-card p {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             line-height: 1.6;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             color: #2a2a2a;
         }
 
@@ -288,7 +304,7 @@
 
         @media (max-width: 900px) {
             .gallery {
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
                 gap: 15px;
             }
 
@@ -308,6 +324,7 @@
             }
         }
 </style>
+    
 </head>
 <body>
     <div class="container">
