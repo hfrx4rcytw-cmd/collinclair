@@ -75,8 +75,9 @@
 }
 
 .post-card.tall {
-    grid-row: span 2;
+    height: 580px;  /* Double height for tall cards (280px × 2 + 20px gap) */
 }
+
 
         .post-card:hover {
             transform: translateY(-3px);
@@ -94,6 +95,7 @@
 
         .post-image {
            width: 100%;
+            height: 280px;
     flex: 1;  
     background: #e8dcc8;
     display: flex;
@@ -108,11 +110,10 @@
         }
 
         .post-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            max-height: 280px;
+     width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
         }
 
         .post-content {
