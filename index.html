@@ -21,7 +21,7 @@
         }
 
         .container {
-            max-width: 100%;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 40px 30px;
         }
@@ -54,16 +54,14 @@
 
         .gallery {
             display: grid;
-            grid-template-columns: 350px 350px;
-            grid-auto-rows: 400px;
+            grid-template-columns: repeat(2, 1fr);
+            grid-auto-rows: 450px;
             gap: 20px;
-            justify-content: center;
             margin-bottom: 80px;
         }
 
         .post-card {
             border: 3px solid #2a2a2a;
-            position: relative;
             display: flex;
             flex-direction: column;
             transition: transform 0.2s;
@@ -73,9 +71,6 @@
 
         .post-card.large {
             grid-column: span 2;
-            width: 720px;
-            max-width: 720px;
-            min-width: 720px;
         }
 
         .post-card.tall {
@@ -109,7 +104,7 @@
 
         .post-image {
             width: 100%;
-            height: 280px;
+            height: 330px;
             background: #e8dcc8;
             display: flex;
             align-items: center;
@@ -134,7 +129,6 @@
             padding: 20px;
             display: flex;
             flex-direction: column;
-            min-height: 0;
         }
 
         .post-date {
@@ -162,7 +156,6 @@
 
         .spotify-card {
             border: 3px solid #2a2a2a;
-            position: relative;
             padding: 0;
             display: flex;
             flex-direction: column;
@@ -188,14 +181,13 @@
 
         .spotify-card iframe {
             width: 100%;
-            height: 400px;
+            height: 100%;
             border: none;
             display: block;
-            }
+        }
 
         .text-card {
             border: 3px solid #2a2a2a;
-            position: relative;
             padding: 30px;
             display: flex;
             flex-direction: column;
@@ -294,13 +286,18 @@
             color: #6b4a6a;
         }
 
-        @media (max-width: 750px) {
+        @media (max-width: 768px) {
             .gallery {
-                grid-template-columns: 350px;
+                grid-template-columns: 1fr;
             }
 
             .container {
                 padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 2rem;
+                letter-spacing: 4px;
             }
         }
 </style>
@@ -356,7 +353,7 @@
             
                 <!-- Image Post -->
                 <div class="post-card" onclick="openLightbox(this)">
-                    
+                    <div class="post-image">
                         <img src="art/bloody.departures.JPG" alt="bloody departures">
                     </div>
                     <div class="post-content">
