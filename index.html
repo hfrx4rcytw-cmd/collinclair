@@ -13,11 +13,16 @@
             box-sizing: border-box;
         }
 
+        html {
+            overflow-x: hidden;
+        }
+
         body {
             font-family: 'Courier New', monospace;
             background: #f5f3ed;
             color: #2a2a2a;
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
         .container {
@@ -65,6 +70,12 @@
             min-height: 0;
         }
 
+        .gallery > *:last-child:nth-child(odd) {
+            grid-column: 1 / -1;
+            justify-self: center;
+            width: calc(50% - 10px);
+        }
+
         .post-card {
             border: 3px solid #2a2a2a;
             display: flex;
@@ -86,21 +97,17 @@
             transform: translateY(-3px);
         }
 
-        .post-card:nth-child(1) { background: #d4b5a0; }
-        .post-card:nth-child(2) { background: #a8c5d1; }
-        .post-card:nth-child(3) { background: #e8d5b7; }
-        .post-card:nth-child(4) { background: #c4b5a8; }
-        .post-card:nth-child(5) { background: #b5c5b8; }
-        .post-card:nth-child(6) { background: #d5b8c4; }
-        .post-card:nth-child(7) { background: #c5d1b8; }
-        .post-card:nth-child(8) { background: #b8c4d1; }
-        .post-card:nth-child(9) { background: #d1c5a8; }
-
-        .post-card:last-child:nth-child(odd) {
-        grid-column: 1 / -1;
-        max-width: 50%;
-        margin: 0 auto;
-        }
+        .post-card:nth-child(12n+1) { background: #d4b5a0; }
+        .post-card:nth-child(12n+3) { background: #e8d5b7; }
+        .post-card:nth-child(12n+4) { background: #c4b5a8; }
+        .post-card:nth-child(12n+5) { background: #b5c5b8; }
+        .post-card:nth-child(12n+6) { background: #d5b8c4; }
+        .post-card:nth-child(12n+7) { background: #c5d1b8; }
+        .post-card:nth-child(12n+8) { background: #b8c4d1; }
+        .post-card:nth-child(12n+9) { background: #d1c5a8; }
+        .post-card:nth-child(12n+10) { background: #c4d1b5; }
+        .post-card:nth-child(12n+11) { background: #d1b8c5; }
+        .post-card:nth-child(12n) { background: #b5d1c4; }
 
         .post-image {
             width: 100%;
@@ -118,6 +125,16 @@
             flex-shrink: 0;
         }
 
+        .post-card.large .post-image,
+        .post-card.tall .post-image {
+            height: 100%;
+            max-height: none;
+        }
+
+        .post-card.large.tall .post-image {
+            height: 100%;
+        }
+
         .post-image img {
             width: 100%;
             height: 100%;
@@ -129,6 +146,12 @@
             padding: 15px 20px;
             display: flex;
             flex-direction: column;
+        }
+
+        .post-card.large .post-content,
+        .post-card.tall .post-content {
+            flex-shrink: 0;
+            height: auto;
         }
 
         .post-date {
@@ -190,6 +213,7 @@
             flex-direction: column;
             justify-content: center;
             transition: transform 0.2s;
+            background: #a8c5d1;
         }
 
         .text-card.large {
@@ -203,10 +227,6 @@
         .text-card:hover {
             transform: translateY(-3px);
         }
-
-        .text-card:nth-child(5n+1) { background: #d4c5a8; }
-        .text-card:nth-child(5n+2) { background: #a8d4c5; }
-        .text-card:nth-child(5n+3) { background: #c5a8d4; }
 
         .text-card .post-date {
             margin-bottom: 15px;
@@ -233,22 +253,49 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.95);
             z-index: 1000;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             cursor: pointer;
+            overflow-y: auto;
+            padding: 40px 20px;
         }
 
-            .lightbox-info {
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 70vh;
+            object-fit: contain;
+            border: 4px solid #5fd4a0;
+        }
+
+        .lightbox-close {
             position: absolute;
-            bottom: 50px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.8);
-            padding: 20px 30px;
+            top: 30px;
+            right: 40px;
+            color: #5fd4a0;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+        }
+
+        .lightbox-info {
+            position: relative;
+            bottom: auto;
+            left: auto;
+            transform: none;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 25px 40px;
             border: 3px solid #5fd4a0;
-            max-width: 600px;
+            max-width: 90%;
+            width: 100%;
             text-align: center;
-        }        
+            margin-top: 20px;
+        }
 
         .lightbox-date {
             font-size: 0.7rem;
@@ -266,33 +313,11 @@
             text-transform: uppercase;
             letter-spacing: 2px;
         }
-        
+
         .lightbox-caption {
             font-size: 0.9rem;
             color: #e0e0e0;
             line-height: 1.5;
-        }
-
-        .lightbox.active {
-            display: flex;
-        }
-
-        .lightbox img {
-            max-width: 90%;
-            max-height: 90vh;
-            object-fit: contain;
-            border: 4px solid #5fd4a0;
-        }
-
-        .lightbox-close {
-            position: absolute;
-            top: 30px;
-            right: 40px;
-            color: #5fd4a0;
-            font-size: 2rem;
-            font-weight: bold;
-            cursor: pointer;
-            font-family: 'Courier New', monospace;
         }
 
         footer {
@@ -330,7 +355,7 @@
                 letter-spacing: 4px;
             }
         }
-    </style>
+</style>
     
 </head>
 <body>
