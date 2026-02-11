@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <meta name="format-detection" content="telephone=no">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <title>Collin Clair</title>
@@ -14,6 +15,14 @@
             <h1>Collin Clair</h1>
             <p class="subtitle">sf</p>
         </header>
+
+        <div class="filter-bar">
+    <button class="filter-btn active" data-filter="all">stream of consciousness</button>
+    <button class="filter-btn" data-filter="art">art</button>
+    <button class="filter-btn" data-filter="photo">photos</button>
+    <button class="filter-btn" data-filter="text">babble</button>
+    <button class="filter-btn" data-filter="music">music</button>
+</div>
         
 <style>
         * {
@@ -66,6 +75,38 @@
             text-transform: lowercase;
         }
 
+        .filter-bar {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: transparent;
+            border: 1px solid #d4c4b0;
+            padding: 8px 16px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: lowercase;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-btn:hover {
+            border-color: #2a2a2a;
+            color: #2a2a2a;
+        }
+
+        .filter-btn.active {
+            background: #2a2a2a;
+            color: #f5f3ed;
+            border-color: #2a2a2a;
+        }
+
         .gallery {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -87,6 +128,10 @@
             cursor: pointer;
             overflow: hidden;
             box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .post-card.hidden {
+            display: none;
         }
 
         .post-card:nth-child(12n+1) { background: #d4b5a0; }
@@ -125,6 +170,19 @@
             font-size: 0.85rem;
             overflow: hidden;
             flex-shrink: 0;
+            position: relative;
+        }
+
+        .gallery-indicator {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: rgba(0,0,0,0.7);
+            color: #fff;
+            padding: 4px 8px;
+            font-size: 0.7rem;
+            border-radius: 2px;
+            letter-spacing: 0.5px;
         }
 
         .post-card.large .post-image {
@@ -185,6 +243,10 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.08);
         }
 
+        .spotify-card.hidden {
+            display: none;
+        }
+
         .spotify-card.large {
             grid-column: 1 / -1;
         }
@@ -216,6 +278,10 @@
             background: #a8c5d1;
         }
 
+        .text-card.hidden {
+            display: none;
+        }
+
         .text-card.large {
             grid-column: 1 / -1;
         }
@@ -243,6 +309,7 @@
             color: #555;
         }
 
+        /* Lightbox */
         .lightbox {
             display: none;
             position: fixed;
@@ -252,28 +319,16 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.95);
             z-index: 1000;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
             overflow-y: auto;
             padding: 40px 20px;
         }
 
         .lightbox.active {
-            display: flex;
-        }
-
-        .lightbox img {
-            max-width: 90%;
-            max-height: 70vh;
-            object-fit: contain;
-            border: 2px solid #5fd4a0;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            display: block;
         }
 
         .lightbox-close {
-            position: absolute;
+            position: fixed;
             top: 24px;
             right: 24px;
             color: #5fd4a0;
@@ -288,13 +343,32 @@
             align-items: center;
             justify-content: center;
             transition: transform 0.2s;
+            background: rgba(0,0,0,0.5);
+            border-radius: 50%;
         }
 
         .lightbox-close:hover {
             transform: scale(1.1);
         }
 
-        .lightbox-info {
+        /* Single image lightbox */
+        .lightbox-single {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .lightbox-single img {
+            max-width: 90%;
+            max-height: 70vh;
+            object-fit: contain;
+            border: 2px solid #5fd4a0;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        }
+
+        .lightbox-single .lightbox-info {
             position: relative;
             background: rgba(0, 0, 0, 0.85);
             padding: 24px 32px;
@@ -304,6 +378,44 @@
             text-align: center;
             margin-top: 16px;
             backdrop-filter: blur(10px);
+        }
+
+        /* Gallery lightbox */
+        .lightbox-gallery {
+            max-width: 800px;
+            margin: 0 auto;
+            padding-bottom: 40px;
+        }
+
+        .gallery-item {
+            margin-bottom: 32px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .gallery-item img {
+            width: 100%;
+            border: 2px solid #5fd4a0;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            margin-bottom: 16px;
+        }
+
+        .gallery-item-text {
+            background: rgba(0, 0, 0, 0.85);
+            padding: 24px;
+            border: 1px solid #5fd4a0;
+            backdrop-filter: blur(10px);
+        }
+
+        .gallery-item-caption {
+            color: #e0e0e0;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            font-family: 'Courier New', monospace;
         }
 
         .lightbox-date {
@@ -358,6 +470,15 @@
                 gap: 16px;
             }
 
+            .filter-bar {
+                gap: 8px;   
+            }
+
+            .filter-btn {
+                padding: 6px 12px;
+                font-size: 0.75rem;
+            }
+
             .container {
                 padding: 32px 16px;
             }
@@ -370,6 +491,11 @@
             .subtitle {
                 letter-spacing: 2px;
             }
+
+            .lightbox-close {
+                top: 16px;
+                right: 16px;
+            }
         }
 </style>
         
@@ -377,7 +503,7 @@
             <div class="gallery">
 
                  <!-- Art Post -->
-                <div class="post-card" onclick="openLightbox(this)">
+                <div class="post-card" data-type=”art” onclick="openLightbox(this)">
                     <div class="post-image">
                         <img src="art/the.cable.car.system.JPG" alt="the cable car system">
                     </div>
@@ -389,14 +515,14 @@
                 </div>
 
                   <!-- Text Post -->
-                <div class="text-card">
+                <div class="text-card" data-type="text">
                     <div class="post-date">01 / 26 / 2026</div>
                     <div class="post-title">definition</div>
                     <p>one sitting = one amount of time drawing before i need to leave to go pee</p>
                 </div>
 
                   <!-- Art Post -->
-                <div class="post-card" onclick="openLightbox(this)">
+                <div class="post-card" data-type="art" onclick="openLightbox(this)">
                     <div class="post-image">
                         <img src="art/the.lonesome.paradise.atop.russian.hill.JPG" alt="the lonesome paradise atop russian hill">
                     </div>
@@ -408,7 +534,7 @@
                 </div>
 
                     <!-- Photo Post -->
-                <div class="post-card" onclick="openLightbox(this)">
+                <div class="post-card" data-type="photo" onclick="openLightbox(this)">
                     <div class="post-image">
                         <img src="photos/red.rack.jpg" alt="red rack">
                     </div>
@@ -420,13 +546,13 @@
                 </div>
 
                 <!-- Spotify Card -->
-                <div class="spotify-card">
+                <div class="spotify-card" data-type="music">
                     <iframe src="https://open.spotify.com/embed/playlist/6olrxrAWmkAN0tC4risOCl" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
                 </div>
                 
             
                 <!-- Art Post -->
-                <div class="post-card" onclick="openLightbox(this)">
+                <div class="post-card" data-type="art" onclick="openLightbox(this)">
                     <div class="post-image">
                         <img src="art/bloody.departures.JPG" alt="bloody departures">
                     </div>
@@ -438,7 +564,7 @@
                 </div>
                 
               <!-- Art Post -->
-                <div class="post-card large tall" onclick="openLightbox(this)">
+                <div class="post-card large tall" data-type="art" onclick="openLightbox(this)">
                     <div class="post-image">
                         <img src="art/the.depths.of.haze.JPG" alt="the depths of haze">
                     </div>
@@ -450,7 +576,7 @@
                 </div>
 
                   <!-- Art Post -->
-                <div class="post-card" onclick="openLightbox(this)">
+                <div class="post-card" data-type="art" onclick="openLightbox(this)">
                     <div class="post-image">
                         <img src="art/weeping.sunshine.JPG" alt="Weeping Sunshine">
                     </div>
@@ -462,7 +588,7 @@
                 </div>
 
                   <!-- Art Post -->
-                <div class="post-card" onclick="openLightbox(this)">
+                <div class="post-card" data-type="art" onclick="openLightbox(this)">
                     <div class="post-image">
                         <img src="art/lyon.st.steps.JPG" alt="Lyon st steps">
                     </div>
@@ -474,7 +600,7 @@
                 </div>
 
                   <!-- Art Post -->
-                <div class="post-card" onclick="openLightbox(this)">
+                <div class="post-card" data-type="art" onclick="openLightbox(this)">
                     <div class="post-image">
                         <img src="art/washington.sq.feeding.frenzy.jpg" alt="washington sq feeding frenzy">
                     </div>
@@ -486,7 +612,7 @@
                 </div>
 
                 <!-- Art Post -->
-                <div class="post-card" onclick="openLightbox(this)">
+                <div class="post-card" data-type="art" onclick="openLightbox(this)">
                     <div class="post-image">
                         <img src="art/tylers.dinner.JPG" alt="tylers dinner">
                     </div>
@@ -498,7 +624,7 @@
                 </div>
 
                 <!-- Art Post -->
-                <div class="post-card" onclick="openLightbox(this)">
+                <div class="post-card" data-type="art" onclick="openLightbox(this)">
                     <div class="post-image">
                         <img src="art/purple.sand.vine.JPG" alt="Purple Sand Vine">
                     </div>
@@ -510,7 +636,7 @@
                 </div>
 
                 <!-- Photo Post -->
-                <div class="post-card" onclick="openLightbox(this)">
+                <div class="post-card" data-type="photo" onclick="openLightbox(this)">
                     <div class="post-image">
                         <img src="photos/self.portrait.1.jpg" alt="self portrait 1">
                     </div>
@@ -528,43 +654,112 @@
         </footer>
     </div>
     
-    <!-- Lightbox -->
-    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
-    <span class="lightbox-close">×</span>
-    <img id="lightbox-img" src="" alt="">
-        <div class="lightbox-info">
-            <div class="lightbox-date" id="lightbox-date"></div>
-            <div class="lightbox-title" id="lightbox-title"></div>
-            <div class="lightbox-caption" id="lightbox-caption"></div>
-        </div>
-    </div>
+   <!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="handleLightboxClick(event)">
+    <span class="lightbox-close" onclick="closeLightbox()">×</span>
+    <div id="lightbox-content"></div>
+</div>
 
-    <script>
+   <script>
+        // Filter functionality
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const posts = document.querySelectorAll('[data-type]');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const filter = btn.dataset.filter;
+                
+                // Update active button
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                // Filter posts
+                posts.forEach(post => {
+                    if (filter === 'all') {
+                        post.classList.remove('hidden');
+                    } else {
+                        if (post.dataset.type === filter) {
+                            post.classList.remove('hidden');
+                        } else {
+                            post.classList.add('hidden');
+                        }
+                    }
+                });
+            });
+        });
+
+        // Lightbox functionality
         function openLightbox(card) {
-            const img = card.querySelector('.post-image img');
-            if (img) {
-                const lightbox = document.getElementById('lightbox');
-                const lightboxImg = document.getElementById('lightbox-img');
+            const lightbox = document.getElementById('lightbox');
+            const content = document.getElementById('lightbox-content');
+            const galleryData = card.dataset.gallery;
+            
+            if (galleryData) {
+                // Gallery lightbox
+                const gallery = JSON.parse(galleryData);
                 const date = card.querySelector('.post-date')?.textContent || '';
                 const title = card.querySelector('.post-title')?.textContent || '';
                 const caption = card.querySelector('.post-caption')?.textContent || '';
-        
-                lightboxImg.src = img.src;
-                lightboxImg.alt = img.alt;
-                document.getElementById('lightbox-date').textContent = date;
-                document.getElementById('lightbox-title').textContent = title;
-                document.getElementById('lightbox-caption').textContent = caption;
-        
-                lightbox.classList.add('active');
-              }
+                
+                let html = '<div class="lightbox-gallery">';
+                html += '<div class="gallery-item-text">';
+                html += `<div class="lightbox-date">${date}</div>`;
+                html += `<div class="lightbox-title">${title}</div>`;
+                html += `<div class="lightbox-caption">${caption}</div>`;
+                html += '</div>';
+                
+                gallery.forEach(item => {
+                    html += '<div class="gallery-item">';
+                    if (item.type === 'image') {
+                        html += `<img src="${item.src}" alt="">`;
+                        if (item.caption) {
+                            html += `<div class="gallery-item-text"><div class="gallery-item-caption">${item.caption}</div></div>`;
+                        }
+                    } else if (item.type === 'text') {
+                        html += `<div class="gallery-item-text"><div class="gallery-item-caption">${item.content}</div></div>`;
+                    }
+                    html += '</div>';
+                });
+                
+                html += '</div>';
+                content.innerHTML = html;
+            } else {
+                // Single image lightbox
+                const img = card.querySelector('.post-image img');
+                if (!img) return;
+                
+                const date = card.querySelector('.post-date')?.textContent || '';
+                const title = card.querySelector('.post-title')?.textContent || '';
+                const caption = card.querySelector('.post-caption')?.textContent || '';
+                
+                content.innerHTML = `
+                    <div class="lightbox-single">
+                        <img src="${img.src}" alt="${img.alt}">
+                        <div class="lightbox-info">
+                            <div class="lightbox-date">${date}</div>
+                            <div class="lightbox-title">${title}</div>
+                            <div class="lightbox-caption">${caption}</div>
+                        </div>
+                    </div>
+                `;
             }
+            
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
 
         function closeLightbox() {
             const lightbox = document.getElementById('lightbox');
             lightbox.classList.remove('active');
+            document.body.style.overflow = '';
         }
 
-        // Close lightbox on ESC key
+        function handleLightboxClick(event) {
+            if (event.target.id === 'lightbox') {
+                closeLightbox();
+            }
+        }
+
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeLightbox();
